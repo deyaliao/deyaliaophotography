@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Build script for deyaliaophotography.com
+Build script for deyaliaophoto.com
 
 Resizes the original photos into web-sized copies (and strips EXIF/GPS data),
 then writes docs/assets/data.js, which the pages use to lay out photos.
