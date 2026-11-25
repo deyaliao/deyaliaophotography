@@ -18,13 +18,16 @@ To pick a cover photo for a gallery, add it to COVERS below.
 To change the order galleries appear in, edit GALLERY_ORDER.
 """
 import json
+
+import numpy as np
 import os
+import math
 import re
 import sys
 from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
-from PIL import Image, ImageOps
+from PIL import Image, ImageOps, ImageStat
 
 ROOT = Path(__file__).parent
 SITE = ROOT / "docs"
@@ -59,6 +62,17 @@ GALLERY_LOCATIONS = {
     "kyu + missa": "gas works park",
     "meghan + marco": "nyc city hall",
     "vic + dan": "seattle chinatown",
+}
+
+# Optional extra line under the location: (english, chinese).
+GALLERY_NOTES = {
+    "meghan + marco": ("digital + 35 mm film", "数码 + 35mm 胶片"),
+}
+
+# Optional: photos shown first (the top row) on a gallery page, in this order.
+GALLERY_FIRST = {
+    "caitlin + dane": ["DSC00721.jpg", "DSC01216.jpg", "DSC01041.jpg", "DSC01301.jpg", "DSC01015.jpg"],
+    "meghan + marco": ["_DSC9017.jpg", "000005860018.jpg", "_DSC8838.jpg", "000005860024.jpg"],
 }
 
 # Optional: order of galleries. Unlisted galleries are appended alphabetically.
@@ -98,6 +112,145 @@ def process(job):
 def photo_entry(rel_dir: str, stem: str, size):
     w, h = size
     return {"src": f"img/{rel_dir}/{stem}", "w": w, "h": h}
+
+
+# ---------- gallery arrangement ----------
+# Photos of the same moment (e.g. a film shot and its digital twin) share almost the
+# same colours. We arrange each gallery so look-alike photos never sit next to or
+# directly under each other in the masonry columns, at any screen width.
+def colour_sig(path):
+    with Image.open(path) as im:
+        im = im.convert("RGB").resize((48, 72)).convert("HSV")
+        hist = [0.0] * 24
+        for h, s, v in im.getdata():
+            hist[h * 24 // 256] += (s / 255) * (v / 255)
+    tot = sum(hist) or 1.0
+    return np.sqrt(np.array(hist) / tot)
+
+
+def shape_sig(path):
+    """Small contrast-normalised greyscale thumbnails of the photo and of zoomed-in crops,
+    so a film frame and a digital frame of the same moment match despite different framing."""
+    with Image.open(path) as im:
+        im = ImageOps.equalize(im.convert("L"))
+        w, h = im.size
+        size = (16, 24) if h >= w else (24, 16)
+        out = []
+        for s in (1.0, 0.88, 0.76):
+            for fx in ((0.5,) if s == 1 else (0, 0.5, 1)):
+                for fy in ((0.5,) if s == 1 else (0, 0.5, 1)):
+                    x, y = (w - w * s) * fx, (h - h * s) * fy
+                    c = im.crop((int(x), int(y), int(x + w * s), int(y + h * s))).resize(size, Image.BILINEAR)
+                    v = np.asarray(c, dtype=np.float32).ravel()
+                    v = (v - v.mean()) / (v.std() + 1e-6)
+                    out.append(v / np.sqrt(v.size))
+    return h >= w, np.stack(out)
+
+
+def is_black_and_white(path):
+    with Image.open(path) as im:
+        return ImageStat.Stat(im.convert("RGB").resize((60, 90)).convert("HSV")).mean[1] < 3
+
+
+def lookalike_matrix(paths):
+    """Higher = more alike. Mixes colour palette and composition, each scored relative to the gallery."""
+    n = len(paths)
+    col = np.stack([colour_sig(p) for p in paths])
+    colour = col @ col.T
+    shapes = [shape_sig(p) for p in paths]
+    shape = np.full((n, n), np.nan)
+    for i in range(n):
+        for j in range(i + 1, n):
+            if shapes[i][0] == shapes[j][0]:      # only compare photos of the same orientation
+                a, b = shapes[i][1], shapes[j][1]
+                shape[i, j] = shape[j, i] = max((a[:1] @ b.T).max(), (b[:1] @ a.T).max())
+    iu = np.triu_indices(n, 1)
+    ok = ~np.isnan(shape[iu])
+    if ok.sum() < 2:
+        return np.zeros((n, n))
+    def z(m):
+        v = m[iu][ok]
+        return (m - v.mean()) / (v.std() + 1e-9)
+    zs = z(shape)
+    # a very close composition counts on its own (catches black & white versions of colour shots)
+    return np.nan_to_num(np.maximum(zs + z(colour), zs), nan=-9.0)
+
+
+def spread_order(n):
+    """Fixed big-stride order so shots taken back to back end up far apart."""
+    if n < 4:
+        return list(range(n))
+    step = round(n * 0.382)
+    while math.gcd(step, n) != 1:
+        step += 1
+    return [(i * step) % n for i in range(n)]
+
+
+GAP, SLACK = 0.05, 0.1
+LOOKALIKE = 2.3        # how alike two photos must be before they are kept apart (higher = stricter)
+
+
+def neighbours(order, ratios):
+    """Pairs of positions that touch in the gallery layout at 1-4 columns.
+    Mirrors main.js: each photo goes into the currently shortest column (leftmost on ties)."""
+    pairs = set()
+    for cols in (1, 2, 3, 4):
+        heights = [0.0] * cols
+        last = [None] * cols
+        placed = []
+        for pos, i in enumerate(order):
+            c = heights.index(min(heights))
+            top = heights[c]
+            heights[c] += ratios[i] + GAP
+            placed.append((c, top, heights[c]))
+            if last[c] is not None:
+                pairs.add((last[c], pos))
+            last[c] = pos
+        for x in range(len(order)):
+            cx, tx, bx = placed[x]
+            for y in range(x + 1, len(order)):
+                cy, ty, by = placed[y]
+                if abs(cx - cy) == 1 and ty < bx + SLACK and tx < by + SLACK:
+                    pairs.add((x, y))
+    return pairs
+
+
+def arrange(paths, ratios, pinned=()):
+    """pinned: indexes of photos that must come first, in that order (the top row)."""
+    n = len(paths)
+    sim = lookalike_matrix(paths).tolist()
+    thr = LOOKALIKE
+    def cost(order):
+        return sum(max(0.0, sim[order[a]][order[b]] - thr) for a, b in neighbours(order, ratios))
+    k = len(pinned)
+    # black & white photos are spread evenly through the gallery (starting near the top)
+    # instead of wherever they happen to land; colour photos fill the other spots
+    bw = [is_black_and_white(p) for p in paths]
+    rest = [i for i in spread_order(n) if i not in pinned]
+    mono, colour = [i for i in rest if bw[i]], [i for i in rest if not bw[i]]
+    slots = {k + 2 + round(j * (len(rest) - 2) / len(mono)) for j in range(len(mono))} if mono else set()
+    order = list(pinned)
+    for pos in range(k, n):
+        order.append(mono.pop(0) if (pos in slots and mono) or not colour else colour.pop(0))
+    best = cost(order)
+    for _ in range(10):
+        improved = False
+        bad = sorted({x for a, b in neighbours(order, ratios) if sim[order[a]][order[b]] > thr for x in (a, b)})
+        for a in bad:
+            if a < k:
+                continue
+            for b in range(k, n):
+                if a == b or bw[order[a]] != bw[order[b]]:   # only swap like with like
+                    continue
+                order[a], order[b] = order[b], order[a]
+                c = cost(order)
+                if c < best - 1e-9:
+                    best, improved = c, True
+                    break                      # keep this swap, move on to the next bad photo
+                order[a], order[b] = order[b], order[a]
+        if not improved:
+            break
+    return order
 
 
 def main():
@@ -159,7 +312,13 @@ def main():
             "type": GALLERY_TYPES.get(g.name, ""),
             "location": GALLERY_LOCATIONS.get(g.name, ""),
             "cover": cover,
-            "photos": [e for _, e in items],
+            "note": GALLERY_NOTES.get(g.name, ("", ""))[0],
+            "note_zh": GALLERY_NOTES.get(g.name, ("", ""))[1],
+            "photos": [items[i][1] for i in arrange(
+                [OUT / f"galleries/{slugify(g.name)}" / f"{slugify(Path(n).stem)}-md.jpg" for n, _ in items],
+                [e["h"] / e["w"] for _, e in items],
+                [next(i for i, (n, _) in enumerate(items) if n == f) for f in GALLERY_FIRST.get(g.name, [])
+                 if any(n == f for n, _ in items)])],
         })
 
     # remove web copies of photos that were deleted from the source folders

@@ -4,7 +4,7 @@
   --ink: #1e1b17;
   --muted: #7d756c;
   --serif: "Playfair Display", "Noto Serif SC", Georgia, "Songti SC", serif;
-  --display: "Archivo", "Noto Sans SC", "Helvetica Neue", "PingFang SC", Arial, sans-serif;
+  --display: "IM Fell English", "Noto Serif SC", Georgia, "Songti SC", serif;
   --gutter: clamp(16px, 4vw, 48px);
   --nav-h: 48px;
   --page-pad: clamp(20px, 9vw, 150px);   /* left & right padding on every page */
@@ -33,7 +33,7 @@ a { color: inherit; }
   padding: 0 var(--gutter);
   background: transparent;
 }
-.brand { font-family: var(--display); font-weight: 600; font-size: 22px; text-decoration: none; white-space: nowrap; }
+.brand { font-family: var(--display); font-weight: 400; font-style: normal; font-size: 27px; text-decoration: none; white-space: nowrap; }
 .nav-center { display: flex; gap: 36px; }
 .nav-right { justify-self: end; }
 .nav a.link { font-family: var(--serif); font-size: 15px; font-style: italic; text-decoration: none; }
@@ -54,7 +54,7 @@ a { color: inherit; }
 
 /* ---------- shared ---------- */
 main { padding: 24px var(--page-pad) 0; }
-h2 { font-family: var(--display); font-weight: 600; font-style: normal; font-size: 20px; line-height: 1.3; margin: 0 0 4px; }
+h2 { font-family: var(--display); font-weight: 400; font-style: normal; font-size: 24px; line-height: 1.3; margin: 0 0 4px; }
 
 .reveal { opacity: 0; transition: opacity .9s ease; }
 .reveal.in { opacity: 1; }
@@ -70,8 +70,8 @@ h2 { font-family: var(--display); font-weight: 600; font-style: normal; font-siz
 .scatter .item { flex: none; }
 .scatter .item img { width: 100%; }
 .scatter a.item { text-decoration: none; }
-.cap { display: flex; justify-content: space-between; gap: 12px; margin-top: 6px; font-size: 13px; }
-.cap span:first-child { font-family: var(--display); font-weight: 500; }
+.cap { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-top: 6px; font-size: 13px; line-height: 20px; height: 20px; }
+.cap span:first-child { font-family: var(--display); font-weight: 400; font-style: normal; font-size: 16px; }
 .cap span + span { color: var(--muted); font-style: italic; }
 .zoomable { cursor: zoom-in; }
 
@@ -86,10 +86,11 @@ h2 { font-family: var(--display); font-weight: 600; font-style: normal; font-siz
 
 /* ---------- single gallery ---------- */
 .gallery-title { text-align: center; font-size: 14px; margin: 0 0 32px; }
-#gallery-title { font-family: var(--display); font-weight: 600; font-size: 20px; }
+#gallery-title { font-family: var(--display); font-weight: 400; font-style: normal; font-size: 26px; }
 .gallery-title .location { color: var(--muted); font-style: italic; font-size: 14px; }
-.masonry { columns: 4 180px; column-gap: 12px; max-width: 1000px; margin: 0 auto; }
-.masonry img { width: 100%; margin-bottom: 12px; break-inside: avoid; }
+.masonry { display: flex; align-items: flex-start; gap: 12px; max-width: 1000px; margin: 0 auto; }
+.masonry .mcol { flex: 1; min-width: 0; }
+.masonry img { width: 100%; margin-bottom: 12px; }
 .gallery-nav { display: flex; justify-content: space-between; max-width: 1000px; margin: 48px auto 0; font-size: 14px; }
 .gallery-nav a { text-decoration: none; }
 
@@ -165,7 +166,7 @@ fieldset.field legend { padding: 0; margin-bottom: 4px; }
 .about-row img { width: 100%; }
 .about-row p { margin: 0 0 1em; }
 .about-row > div { max-width: 400px; }
-.about-row .hello { font-family: var(--display); font-weight: 500; font-size: 22px; margin-bottom: 1em; }
+.about-row .hello { font-family: var(--display); font-weight: 400; font-style: normal; font-size: 28px; margin-bottom: 1em; }
 .justified { max-width: 1000px; margin: 14px auto 0; display: flex; flex-direction: column; gap: 8px; }
 .jrow { display: flex; gap: 8px; }
 .jrow img { width: 100%; height: auto; }

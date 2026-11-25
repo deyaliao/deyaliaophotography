@@ -287,13 +287,33 @@
     document.title = g.name + " · deya liao photography";
     $("#gallery-title").textContent = g.name;
     $("#gallery-location").textContent = g.location || "";
-    var photos = spread(g.photos);
-    photos.forEach(function (p, idx) {
-      var im = img(p, "(max-width: 760px) 100vw, 33vw", g.name);
+    var note = $("#gallery-note");
+    if (g.note) { note.textContent = g.note; note.setAttribute("data-zh", g.note_zh || g.note); }
+    else note.previousElementSibling.remove(), note.remove();
+    var photos = g.photos;   // already arranged by build.py so look-alike shots sit apart
+    // photos go left to right into the shortest column, so the first ones form the top row
+    // (build.py models this exact layout when it keeps look-alike shots apart)
+    var tiles = photos.map(function (p, idx) {
+      var im = img(p, "(max-width: 760px) 100vw, 25vw", g.name);
       im.classList.add("zoomable");
       im.addEventListener("click", function () { openLightbox(photos, idx); });
-      masonry.appendChild(im);
+      return im;
     });
+    var colCount = 0;
+    var layoutGallery = function () {
+      var n = Math.max(1, Math.min(4, Math.floor((masonry.clientWidth + 12) / 192)));
+      if (n === colCount) return;
+      colCount = n; masonry.innerHTML = "";
+      var cols = [], heights = [];
+      for (var c = 0; c < n; c++) { cols.push(masonry.appendChild(el("div", { class: "mcol" }))); heights.push(0); }
+      photos.forEach(function (p, idx) {
+        var c = heights.indexOf(Math.min.apply(null, heights));
+        cols[c].appendChild(tiles[idx]);
+        heights[c] += p.h / p.w + 0.05;
+      });
+    };
+    layoutGallery();
+    window.addEventListener("resize", layoutGallery);
     var prev = DATA.galleries[(gi - 1 + DATA.galleries.length) % DATA.galleries.length];
     var next = DATA.galleries[(gi + 1) % DATA.galleries.length];
     var gnav = $("#gallery-nav");
