@@ -1,0 +1,9 @@
+# Original full-resolution photos stay on your computer only.
+# build.py makes the web-sized copies in docs/img, which is what gets published.
+/home/
+/galleries/
+/travels/
+/*.jpg
+/*.jpeg
+.DS_Store
+__pycache__/
