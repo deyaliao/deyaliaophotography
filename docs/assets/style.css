@@ -203,6 +203,13 @@ footer { padding: 48px var(--gutter) 32px; font-size: 12px; color: var(--muted);
   .hero { padding-top: 0; }          /* tagline sits closer to the nav on laptops */
 }
 
+/* bits of text that only show on one screen size */
+.phone-only { display: none; }
+@media (max-width: 760px) {
+  .phone-only { display: inline; }
+  .desk-only { display: none; }
+}
+
 /* phone: tighter space around the home tagline (kept last so it wins) */
 @media (max-width: 760px) {
   .brand { font-size: 29px; }
