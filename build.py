@@ -40,7 +40,7 @@ QUALITY = 80
 # If a gallery isn't listed, the first photo is used.
 COVERS = {
     "caitlin + dane": "DSC01100.jpg",
-    "christian + linh": "_DSC7334.jpg",
+    "christian + linh": "_DSC7543.jpg",
     "kyu + missa": "_DSC1083.jpg",
     "meghan + marco": "000005860029.jpg",
     "vic + dan": "DSC00096.jpg",
@@ -71,8 +71,15 @@ GALLERY_NOTES = {
 
 # Optional: photos shown first (the top row) on a gallery page, in this order.
 GALLERY_FIRST = {
+    "christian + linh": ["_DSC7543.jpg", "_DSC7292.jpg", "_DSC7588.jpg", "_DSC7466.jpg"],
     "caitlin + dane": ["DSC00721.jpg", "DSC01216.jpg", "DSC01041.jpg", "DSC01301.jpg", "DSC01015.jpg"],
     "meghan + marco": ["_DSC9017.jpg", "000005860018.jpg", "_DSC8838.jpg", "000005860024.jpg"],
+}
+
+# Optional: photos that should appear near the top (within the next two rows after the
+# GALLERY_FIRST photos). The build picks their exact spots so look-alikes stay apart.
+GALLERY_EARLY = {
+    "christian + linh": ["_DSC7384.jpg", "_DSC7279.jpg"],
 }
 
 # Optional: order of galleries. Unlisted galleries are appended alphabetically.
@@ -215,8 +222,9 @@ def neighbours(order, ratios):
     return pairs
 
 
-def arrange(paths, ratios, pinned=()):
-    """pinned: indexes of photos that must come first, in that order (the top row)."""
+def arrange(paths, ratios, pinned=(), early=()):
+    """pinned: indexes of photos that must come first, in that order (the top row).
+    early: indexes of photos that must land somewhere in the next two rows."""
     n = len(paths)
     sim = lookalike_matrix(paths).tolist()
     thr = LOOKALIKE
@@ -226,30 +234,52 @@ def arrange(paths, ratios, pinned=()):
     # black & white photos are spread evenly through the gallery (starting near the top)
     # instead of wherever they happen to land; colour photos fill the other spots
     bw = [is_black_and_white(p) for p in paths]
-    rest = [i for i in spread_order(n) if i not in pinned]
+    early = [i for i in early if i not in pinned]
+    window = len(pinned) + max(8, len(early))          # early photos must stay before this position
+    rest = list(early) + [i for i in spread_order(n) if i not in pinned and i not in early]
     mono, colour = [i for i in rest if bw[i]], [i for i in rest if not bw[i]]
     slots = {k + 2 + round(j * (len(rest) - 2) / len(mono)) for j in range(len(mono))} if mono else set()
-    order = list(pinned)
-    for pos in range(k, n):
-        order.append(mono.pop(0) if (pos in slots and mono) or not colour else colour.pop(0))
-    best = cost(order)
-    for _ in range(10):
-        improved = False
-        bad = sorted({x for a, b in neighbours(order, ratios) if sim[order[a]][order[b]] > thr for x in (a, b)})
-        for a in bad:
-            if a < k:
-                continue
-            for b in range(k, n):
-                if a == b or bw[order[a]] != bw[order[b]]:   # only swap like with like
+    def start(shift):
+        m = mono[shift % len(mono):] + mono[:shift % len(mono)] if mono else []
+        e = [i for i in colour if i in early]
+        cr = [i for i in colour if i not in early]
+        c = e + (cr[shift % len(cr):] + cr[:shift % len(cr)] if cr else [])
+        order = list(pinned)
+        for pos in range(k, n):
+            order.append(m.pop(0) if (pos in slots and m) or not c else c.pop(0))
+        return order
+
+    def improve(order):
+        best = cost(order)
+        for _ in range(40):
+            improved = False
+            bad = sorted({x for a, b in neighbours(order, ratios) if sim[order[a]][order[b]] > thr for x in (a, b)})
+            for a in bad:
+                if a < k:
                     continue
-                order[a], order[b] = order[b], order[a]
-                c = cost(order)
-                if c < best - 1e-9:
-                    best, improved = c, True
-                    break                      # keep this swap, move on to the next bad photo
-                order[a], order[b] = order[b], order[a]
-        if not improved:
+                for b in range(k, n):
+                    if a == b or bw[order[a]] != bw[order[b]]:   # only swap like with like
+                        continue
+                    if (order[a] in early and b >= window) or (order[b] in early and a >= window):
+                        continue                                   # keep "early" photos near the top
+                    order[a], order[b] = order[b], order[a]
+                    c = cost(order)
+                    if c < best - 1e-9:
+                        best, improved = c, True
+                        break                      # keep this swap, move on to the next bad photo
+                    order[a], order[b] = order[b], order[a]
+            if not improved:
+                break
+        return best, order
+
+    # if look-alikes still touch, retry from a few different starting orders and keep the best
+    best, order = improve(start(0))
+    for shift in (3, 7, 11, 17, 23):
+        if best <= 0:
             break
+        c, o = improve(start(shift))
+        if c < best:
+            best, order = c, o
     return order
 
 
@@ -318,6 +348,8 @@ def main():
                 [OUT / f"galleries/{slugify(g.name)}" / f"{slugify(Path(n).stem)}-md.jpg" for n, _ in items],
                 [e["h"] / e["w"] for _, e in items],
                 [next(i for i, (n, _) in enumerate(items) if n == f) for f in GALLERY_FIRST.get(g.name, [])
+                 if any(n == f for n, _ in items)],
+                [next(i for i, (n, _) in enumerate(items) if n == f) for f in GALLERY_EARLY.get(g.name, [])
                  if any(n == f for n, _ in items)])],
         })
 

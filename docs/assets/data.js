@@ -1401,7 +1401,7 @@ window.SITE_DATA = {
    "type": "engagement",
    "location": "brackett's landing north",
    "cover": {
-    "src": "img/galleries/christian-linh/dsc7334",
+    "src": "img/galleries/christian-linh/dsc7543",
     "w": 733,
     "h": 1100
    },
@@ -1409,19 +1409,39 @@ window.SITE_DATA = {
    "note_zh": "",
    "photos": [
     {
-     "src": "img/galleries/christian-linh/dsc7639",
+     "src": "img/galleries/christian-linh/dsc7543",
+     "w": 733,
+     "h": 1100
+    },
+    {
+     "src": "img/galleries/christian-linh/dsc7292",
+     "w": 733,
+     "h": 1100
+    },
+    {
+     "src": "img/galleries/christian-linh/dsc7588",
+     "w": 733,
+     "h": 1100
+    },
+    {
+     "src": "img/galleries/christian-linh/dsc7466",
+     "w": 733,
+     "h": 1100
+    },
+    {
+     "src": "img/galleries/christian-linh/dsc7813",
      "w": 1100,
      "h": 733
     },
     {
-     "src": "img/galleries/christian-linh/dsc7665",
+     "src": "img/galleries/christian-linh/dsc7279",
      "w": 733,
      "h": 1100
     },
     {
-     "src": "img/galleries/christian-linh/dsc7715",
-     "w": 733,
-     "h": 1100
+     "src": "img/galleries/christian-linh/dsc7523",
+     "w": 1100,
+     "h": 733
     },
     {
      "src": "img/galleries/christian-linh/dsc7384",
@@ -1434,12 +1454,87 @@ window.SITE_DATA = {
      "h": 1100
     },
     {
-     "src": "img/galleries/christian-linh/dsc7521",
+     "src": "img/galleries/christian-linh/dsc7393",
+     "w": 733,
+     "h": 1100
+    },
+    {
+     "src": "img/galleries/christian-linh/dsc7516",
+     "w": 733,
+     "h": 1100
+    },
+    {
+     "src": "img/galleries/christian-linh/dsc7778",
      "w": 1100,
      "h": 733
     },
     {
-     "src": "img/galleries/christian-linh/dsc7466",
+     "src": "img/galleries/christian-linh/dsc7639",
+     "w": 1100,
+     "h": 733
+    },
+    {
+     "src": "img/galleries/christian-linh/dsc7624",
+     "w": 1100,
+     "h": 733
+    },
+    {
+     "src": "img/galleries/christian-linh/dsc7577",
+     "w": 733,
+     "h": 1100
+    },
+    {
+     "src": "img/galleries/christian-linh/dsc7773",
+     "w": 733,
+     "h": 1100
+    },
+    {
+     "src": "img/galleries/christian-linh/dsc7391",
+     "w": 734,
+     "h": 1100
+    },
+    {
+     "src": "img/galleries/christian-linh/dsc7276",
+     "w": 733,
+     "h": 1100
+    },
+    {
+     "src": "img/galleries/christian-linh/dsc7495",
+     "w": 733,
+     "h": 1100
+    },
+    {
+     "src": "img/galleries/christian-linh/dsc7718",
+     "w": 733,
+     "h": 1100
+    },
+    {
+     "src": "img/galleries/christian-linh/dsc7411",
+     "w": 733,
+     "h": 1100
+    },
+    {
+     "src": "img/galleries/christian-linh/dsc7259",
+     "w": 733,
+     "h": 1100
+    },
+    {
+     "src": "img/galleries/christian-linh/dsc7683",
+     "w": 1100,
+     "h": 733
+    },
+    {
+     "src": "img/galleries/christian-linh/dsc7488",
+     "w": 733,
+     "h": 1100
+    },
+    {
+     "src": "img/galleries/christian-linh/dsc7816",
+     "w": 733,
+     "h": 1100
+    },
+    {
+     "src": "img/galleries/christian-linh/dsc7430",
      "w": 733,
      "h": 1100
     },
@@ -1452,206 +1547,6 @@ window.SITE_DATA = {
      "src": "img/galleries/christian-linh/dsc7312",
      "w": 1100,
      "h": 733
-    },
-    {
-     "src": "img/galleries/christian-linh/dsc7381",
-     "w": 733,
-     "h": 1100
-    },
-    {
-     "src": "img/galleries/christian-linh/dsc7430",
-     "w": 733,
-     "h": 1100
-    },
-    {
-     "src": "img/galleries/christian-linh/dsc7516",
-     "w": 733,
-     "h": 1100
-    },
-    {
-     "src": "img/galleries/christian-linh/dsc7478",
-     "w": 733,
-     "h": 1100
-    },
-    {
-     "src": "img/galleries/christian-linh/dsc7276",
-     "w": 733,
-     "h": 1100
-    },
-    {
-     "src": "img/galleries/christian-linh/dsc7543",
-     "w": 733,
-     "h": 1100
-    },
-    {
-     "src": "img/galleries/christian-linh/dsc7771",
-     "w": 733,
-     "h": 1100
-    },
-    {
-     "src": "img/galleries/christian-linh/dsc7391",
-     "w": 734,
-     "h": 1100
-    },
-    {
-     "src": "img/galleries/christian-linh/dsc7627",
-     "w": 733,
-     "h": 1100
-    },
-    {
-     "src": "img/galleries/christian-linh/dsc7816",
-     "w": 733,
-     "h": 1100
-    },
-    {
-     "src": "img/galleries/christian-linh/dsc7259",
-     "w": 733,
-     "h": 1100
-    },
-    {
-     "src": "img/galleries/christian-linh/dsc7693",
-     "w": 1100,
-     "h": 733
-    },
-    {
-     "src": "img/galleries/christian-linh/dsc7488",
-     "w": 733,
-     "h": 1100
-    },
-    {
-     "src": "img/galleries/christian-linh/dsc7401",
-     "w": 733,
-     "h": 1100
-    },
-    {
-     "src": "img/galleries/christian-linh/dsc7801",
-     "w": 1100,
-     "h": 733
-    },
-    {
-     "src": "img/galleries/christian-linh/dsc7336",
-     "w": 733,
-     "h": 1100
-    },
-    {
-     "src": "img/galleries/christian-linh/dsc7671",
-     "w": 733,
-     "h": 1100
-    },
-    {
-     "src": "img/galleries/christian-linh/dsc7292",
-     "w": 733,
-     "h": 1100
-    },
-    {
-     "src": "img/galleries/christian-linh/dsc7773",
-     "w": 733,
-     "h": 1100
-    },
-    {
-     "src": "img/galleries/christian-linh/dsc7778",
-     "w": 1100,
-     "h": 733
-    },
-    {
-     "src": "img/galleries/christian-linh/dsc7411",
-     "w": 733,
-     "h": 1100
-    },
-    {
-     "src": "img/galleries/christian-linh/dsc7635",
-     "w": 733,
-     "h": 1100
-    },
-    {
-     "src": "img/galleries/christian-linh/dsc7273",
-     "w": 733,
-     "h": 1100
-    },
-    {
-     "src": "img/galleries/christian-linh/dsc7501",
-     "w": 733,
-     "h": 1100
-    },
-    {
-     "src": "img/galleries/christian-linh/dsc7718",
-     "w": 733,
-     "h": 1100
-    },
-    {
-     "src": "img/galleries/christian-linh/dsc7394",
-     "w": 733,
-     "h": 1100
-    },
-    {
-     "src": "img/galleries/christian-linh/dsc7533",
-     "w": 733,
-     "h": 1100
-    },
-    {
-     "src": "img/galleries/christian-linh/dsc7815",
-     "w": 733,
-     "h": 1100
-    },
-    {
-     "src": "img/galleries/christian-linh/dsc7588",
-     "w": 733,
-     "h": 1100
-    },
-    {
-     "src": "img/galleries/christian-linh/dsc7683",
-     "w": 1100,
-     "h": 733
-    },
-    {
-     "src": "img/galleries/christian-linh/dsc7393",
-     "w": 733,
-     "h": 1100
-    },
-    {
-     "src": "img/galleries/christian-linh/dsc7624",
-     "w": 1100,
-     "h": 733
-    },
-    {
-     "src": "img/galleries/christian-linh/dsc7795",
-     "w": 733,
-     "h": 1100
-    },
-    {
-     "src": "img/galleries/christian-linh/dsc7595",
-     "w": 733,
-     "h": 1100
-    },
-    {
-     "src": "img/galleries/christian-linh/dsc7495",
-     "w": 733,
-     "h": 1100
-    },
-    {
-     "src": "img/galleries/christian-linh/dsc7279",
-     "w": 733,
-     "h": 1100
-    },
-    {
-     "src": "img/galleries/christian-linh/dsc7813",
-     "w": 1100,
-     "h": 733
-    },
-    {
-     "src": "img/galleries/christian-linh/dsc7523",
-     "w": 1100,
-     "h": 733
-    },
-    {
-     "src": "img/galleries/christian-linh/dsc7788",
-     "w": 733,
-     "h": 1100
-    },
-    {
-     "src": "img/galleries/christian-linh/dsc7577",
-     "w": 733,
-     "h": 1100
     }
    ]
   }

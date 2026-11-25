@@ -194,8 +194,15 @@ html:lang(zh) body { line-height: 1.6; }
 /* ---------- footer ---------- */
 footer { padding: 48px var(--gutter) 32px; font-size: 12px; color: var(--muted); text-align: center; }
 
+/* desktop: nudge the brand down so its baseline lines up with the nav links */
+@media (min-width: 761px) {
+  .brand { position: relative; top: 3px; }
+}
+
 /* phone: tighter space around the home tagline (kept last so it wins) */
 @media (max-width: 760px) {
+  .brand { font-size: 29px; }
+  .lang-toggle { font-size: 12px; right: 6px; padding: 4px; }
   main { padding-top: 4px; }
   .hero { padding: 4px 0 16px; }
 }
