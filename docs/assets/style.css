@@ -206,7 +206,7 @@ footer { padding: 48px var(--gutter) 32px; font-size: 12px; color: var(--muted);
 /* phone: tighter space around the home tagline (kept last so it wins) */
 @media (max-width: 760px) {
   .brand { font-size: 29px; }
-  .hero h1 { font-size: 17px; }       /* fits on one line on most phones */
+  .hero h1 { display: none; }         /* phones show only "now booking" */
   .hero { margin: 0 -14px; }         /* a little extra width so it stays on one line */
   .lang-toggle { font-size: 12px; right: 6px; padding: 4px; }
   main { padding-top: 4px; }
