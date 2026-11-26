@@ -232,6 +232,15 @@
       if (b >= photos.length) break;
       var t = photos[a]; photos[a] = photos[b]; photos[b] = t; b++;
     }
+    // rows are groups of 3 on laptops: never let all three be horizontal
+    var isLand = function (p) { return p.w > p.h; };
+    for (var r = 0; r + 2 < photos.length; r += 3) {
+      if (!(isLand(photos[r]) && isLand(photos[r + 1]) && isLand(photos[r + 2]))) continue;
+      for (var c = r + 3; c < photos.length; c++) {
+        if (isLand(photos[c]) || (r === 0 && photos[c].notfirst)) continue;
+        var u = photos[r + 2]; photos[r + 2] = photos[c]; photos[c] = u; break;
+      }
+    }
     scatter(home, photos, function (p, idx, sizes) {
       var d = el("div", { class: "zoomable" }, [img(p, sizes, "Photo by Deya Liao")]);
       d.addEventListener("click", function () { openLightbox(photos, idx); });
