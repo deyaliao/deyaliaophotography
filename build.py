@@ -283,6 +283,10 @@ def arrange(paths, ratios, pinned=(), early=()):
     return order
 
 
+# home photos that should never open the page (kept out of the top row)
+HOME_NOT_FIRST = {"j.jpg", "_DSC1200.jpg", "_DSC7639.jpg", "c.jpg", "_DSC8886.jpg", "_DSC7312.jpg", "_DSC8730.jpg"}
+
+
 def main():
     force = "--force" in sys.argv
     jobs, plan = [], []
@@ -327,7 +331,7 @@ def main():
     for src, rel_dir, stem in plan:
         by_dir.setdefault(rel_dir, []).append((Path(src).name, photo_entry(rel_dir, stem, sizes[src])))
 
-    data["home"] = [e for _, e in by_dir.get("home", [])]
+    data["home"] = [dict(e, notfirst=True) if n in HOME_NOT_FIRST else e for n, e in by_dir.get("home", [])]
     data["travels"] = [e for _, e in by_dir.get("travels", [])]
     data["about"] = {Path(n).stem: e for n, e in by_dir.get("about", [])}
     for g in galleries:

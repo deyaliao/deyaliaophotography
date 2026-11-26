@@ -62,7 +62,12 @@ window.SITE_DATA = {
    "h": 1100
   },
   {
-   "src": "img/home/dsc01301",
+   "src": "img/home/dsc01239",
+   "w": 734,
+   "h": 1100
+  },
+  {
+   "src": "img/home/dsc01273",
    "w": 734,
    "h": 1100
   },
@@ -99,7 +104,8 @@ window.SITE_DATA = {
   {
    "src": "img/home/dsc1200",
    "w": 733,
-   "h": 1100
+   "h": 1100,
+   "notfirst": true
   },
   {
    "src": "img/home/dsc1523",
@@ -117,29 +123,15 @@ window.SITE_DATA = {
    "h": 733
   },
   {
-   "src": "img/home/dsc6985",
-   "w": 733,
-   "h": 1100
-  },
-  {
    "src": "img/home/dsc7004",
-   "w": 733,
-   "h": 1100
-  },
-  {
-   "src": "img/home/dsc7255",
    "w": 733,
    "h": 1100
   },
   {
    "src": "img/home/dsc7312",
    "w": 1100,
-   "h": 733
-  },
-  {
-   "src": "img/home/dsc7336",
-   "w": 733,
-   "h": 1100
+   "h": 733,
+   "notfirst": true
   },
   {
    "src": "img/home/dsc7466",
@@ -152,24 +144,26 @@ window.SITE_DATA = {
    "h": 1100
   },
   {
+   "src": "img/home/dsc7577",
+   "w": 733,
+   "h": 1100
+  },
+  {
    "src": "img/home/dsc7639",
    "w": 1100,
-   "h": 733
+   "h": 733,
+   "notfirst": true
   },
   {
    "src": "img/home/dsc8730",
    "w": 733,
-   "h": 1100
+   "h": 1100,
+   "notfirst": true
   },
   {
    "src": "img/home/dsc8770",
    "w": 1100,
    "h": 733
-  },
-  {
-   "src": "img/home/dsc8781",
-   "w": 733,
-   "h": 1100
   },
   {
    "src": "img/home/dsc8826",
@@ -179,12 +173,14 @@ window.SITE_DATA = {
   {
    "src": "img/home/dsc8886",
    "w": 733,
-   "h": 1100
+   "h": 1100,
+   "notfirst": true
   },
   {
    "src": "img/home/c",
    "w": 733,
-   "h": 1100
+   "h": 1100,
+   "notfirst": true
   },
   {
    "src": "img/home/h",
@@ -194,7 +190,8 @@ window.SITE_DATA = {
   {
    "src": "img/home/j",
    "w": 733,
-   "h": 1100
+   "h": 1100,
+   "notfirst": true
   }
  ],
  "travels": [

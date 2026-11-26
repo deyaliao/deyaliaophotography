@@ -225,6 +225,13 @@
   var home = $("#home-scatter");
   if (home) {
     var photos = shuffle(DATA.home, rng(Math.floor(Math.random() * 1e9)));
+    // some photos shouldn't open the page: swap them out of the top row
+    for (var a = 0, b = 3; a < 3 && a < photos.length; a++) {
+      if (!photos[a].notfirst) continue;
+      while (b < photos.length && photos[b].notfirst) b++;
+      if (b >= photos.length) break;
+      var t = photos[a]; photos[a] = photos[b]; photos[b] = t; b++;
+    }
     scatter(home, photos, function (p, idx, sizes) {
       var d = el("div", { class: "zoomable" }, [img(p, sizes, "Photo by Deya Liao")]);
       d.addEventListener("click", function () { openLightbox(photos, idx); });
