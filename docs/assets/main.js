@@ -42,7 +42,8 @@
   function img(photo, sizes, alt) {
     return el("img", {
       src: photo.src + "-md.jpg",
-      srcset: photo.src + "-md.jpg 1100w, " + photo.src + "-lg.jpg 2000w",
+      // phones never need the 2000px version: cap them at 1100px
+      srcset: photo.src + "-sm.jpg 700w, " + photo.src + "-md.jpg 1100w" + (MOBILE.matches ? "" : ", " + photo.src + "-lg.jpg 2000w"),
       sizes: sizes || "100vw",
       width: photo.w, height: photo.h,
       alt: alt || "", loading: "lazy", decoding: "async"
@@ -212,10 +213,11 @@
   }
   function show() {
     var p = lbList[lbIndex];
-    lbImg.src = p.src + "-lg.jpg";
+    var big = MOBILE.matches ? "-md.jpg" : "-lg.jpg";
+    lbImg.src = p.src + big;
     lbCount.textContent = (lbIndex + 1) + " / " + lbList.length;
     [lbIndex - 1, lbIndex + 1].forEach(function (n) { // preload neighbours
-      var q = lbList[(n + lbList.length) % lbList.length]; if (q) new Image().src = q.src + "-lg.jpg";
+      var q = lbList[(n + lbList.length) % lbList.length]; if (q) new Image().src = q.src + big;
     });
   }
   function step(d) { lbIndex = (lbIndex + d + lbList.length) % lbList.length; show(); }
@@ -372,6 +374,9 @@
   }
 
   function applyLang() {
+    // the Chinese font is large: only fetch it when the page is in Chinese
+    if (LANG === "zh" && !$("#zh-font")) document.head.appendChild(el("link", { id: "zh-font", rel: "stylesheet",
+      href: "https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500&display=swap" }));
     document.documentElement.lang = LANG === "zh" ? "zh-CN" : "en";
     document.querySelectorAll("[data-zh]").forEach(function (n) {
       if (n.dataset.en == null) n.dataset.en = n.innerHTML;

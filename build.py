@@ -33,7 +33,7 @@ ROOT = Path(__file__).parent
 SITE = ROOT / "docs"
 OUT = SITE / "img"
 
-SIZES = {"md": 1100, "lg": 2000}  # long edge, in px
+SIZES = {"sm": 700, "md": 1100, "lg": 2000}  # long edge, in px
 QUALITY = 80
 
 # Optional: choose the cover photo for each gallery (filename inside the folder).
